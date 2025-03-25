@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="as">
+   <h1>Example of Modifying </h1>
+   <p style="display: none;">hidden text</p> 
+
+    </div>
+    <div id="ass">
+        <h2>Example of modifiying</h2>
+    </div>
+    <div id="ar">
+        <h3>example of modifiying</h3>
+    </div>
+    <div id="arr">
+<h4>example of modifiyng</h4>
+    </div>
+    <script>
+        // innerHTML
+        let myExample=document.getElementById("as")
+        let content=myExample.innerHTML;
+        console.log(content)
+       myExample.innerHTML="<h1>Mohan</h1>"
+      //textContent
+        let myExample1=document.getElementById("ass")
+       let content1=myExample.textContent;
+        console.log(content1)
+        myExample1.innerHTML="<h1>Charan</h1>"
+
+        //innerText
+        let myExample2=document.getElementById("ar")
+        let content2=myExample.innerText;
+        console.log(content2)
+        myExample2.innerHTML="<h1>Gopika</h1>"
+
+        //outerHtml
+        let myFirst=document.getElementById("arr")
+        let outer=myFirst.outerHTML;
+        console.log(outer)
+        myFirst.outerHTML="<h1>Gana</h1>"
+    </script>
+</body>
+</html>

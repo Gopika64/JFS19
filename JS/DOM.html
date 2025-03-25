@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM elements</title>
+
+</head>
+<body>
+    <h1 id="headline">Codegnan</h1>
+
+
+    <h2 class="java1">Java1</h2>
+    <h2 class="css1">Css1</h2>
+    <h3 class="html">Html</h3>
+
+    <p> This is a paragrap A</p>
+    <p>This is a paragrap B</p>
+    <p>This is a paragrap C</p>
+    <script>
+        let ele=document.getElementById("headline");
+        ele.style.color="blue";
+        let ele1=document.getElementsByClassName("java1");
+        ele1[0].style.color="pink";
+        let ele2=document.getElementsByTagName("p");
+        ele2[1].style.color="red";
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let obj1={
+              course:"javafullstack"
+        }
+function func(gopika){
+    console.log(gopika+" "+ this.course);
+}
+    func.call(obj1,"Hello");
+    func.apply(obj1,['welcome']);
+    let car= func.bind(obj1);
+    car("hi");
+    </script>
+</body>
+</html>

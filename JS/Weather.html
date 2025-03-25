@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <style>
+    h1,form,#weatherDisplay{
+        text-align: center;
+    }
+    #weatherDisplay {
+        border: 1px solid black;
+        margin-top: 20px;
+        background-color:whitesmoke;
+    }
+
+    </style>
+</head>
+<body>
+
+  <h1>Weather App</h1>
+  <form id="searchForm">
+    <input type="text" name="text" id="text" placeholder="Enter city name">
+    <button type="submit">Search</button>
+  </form>
+
+  <div id="weatherDisplay" class="hidden"></div>
+
+  <h2>Favorites List</h2>
+  <ul id="favouritesList">
+    
+  </ul>
+
+  <script>
+    const API_KEY = 'bd5e378503939ddaee76f12ad7a97608'; 
+    const BASE_URL = `https://api.openweathermap.org/data/2.5/weather`;
+
+    const weatherDisplay = document.getElementById("weatherDisplay");
+    const favouritesList = document.getElementById("favouritesList");
+    const searchForm = document.getElementById("searchForm");
+    const searchInput = document.getElementById("text");
+
+    let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
+
+    searchForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const city = searchInput.value.trim();
+
+      if (city === "") {
+        alert("Please enter a city name.");
+        return;
+      }
+
+      await fetchWeather(city);
+      searchInput.value = ""; 
+    });
+
+    // Fetch weather data for a city
+    async function fetchWeather(city) {
+      const url = `${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.cod === "404") {
+          alert("City not found.");
+          return;
+        }
+
+        displayWeather(data);
+      } catch (error) {
+        alert("Error fetching weather data.");
+        console.error(error);
+      }
+    }
+
+    function displayWeather(data) {
+      const { name, sys, weather, main } = data;
+      const weatherInfo = `
+        <h3>Weather in ${name}, ${sys.country}</h3>
+        <p><strong>Temperature:</strong> ${main.temp}°C</p>
+        <p><strong>Humidity:</strong> ${main.humidity}%</p>
+        
+      `;
+
+      weatherDisplay.innerHTML = weatherInfo;
+      weatherDisplay.style.display = "block";
+
+      addToFavourites(name, sys.country);
+    }
+
+    function addToFavourites(cityName, country) {
+      const favourite = { cityName, country };
+
+      if (!favourites.some(fav => fav.cityName === cityName && fav.country === country)) {
+        favourites.push(favourite);
+        updateFavouritesList();
+      }
+    }
+
+    function updateFavouritesList() {
+        favouritesList.innerHTML = "";
+
+        favourites.forEach((favourite, index) => {
+            const li = document.createElement("li");
+            li.textContent = `${favourite.cityName}, ${favourite.country}`;
+
+            const edit = document.createElement("button");
+            edit.textContent = "Edit";
+            edit.addEventListener("click", () => editFavourite(index));
+
+            const remove = document.createElement("button");
+            remove.textContent = "Remove";
+            remove.addEventListener("click", () => removeFavourite(index));
+
+            const show = document.createElement("button");
+            show.textContent = "Show Weather";
+            show.addEventListener("click", () => showWeather(index));
+
+            li.appendChild(edit);
+            li.appendChild(remove);
+            li.appendChild(show);
+
+            favouritesList.appendChild(li);
+
+        });
+
+      localStorage.setItem("favourites", JSON.stringify(favourites));
+    }
+    
+    function editFavourite(index) {
+        const newCityName = prompt("Enter the new city name:", favourites[index].cityName);
+        if (newCityName) {
+            favourites[index].cityName = newCityName.trim();
+            updateFavouritesList();
+        }
+    }
+
+    function removeFavourite(index) {
+        favourites.splice(index, 1);
+        updateFavouritesList();
+    }
+
+    function showWeather(index) {
+        const favourite = favourites[index];
+        fetchWeather(favourite.cityName);
+    }
+    updateFavouritesList(); 
+  </script>
+
+</body>
+</html>
